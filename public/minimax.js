@@ -109,16 +109,16 @@
 		var minimizingPlayer = (maximizingPlayer == 'x') ? 'o' : 'x';
 		//This is how you can retrieve the minimizing player.
 
-    var linesOfTwoForMax = (state.numLines(2, maximizingPlayer)*10);
-    var linesOfThreeForMax = (state.numLines(3, maximizingPlayer)*25);
-    var linesOfFourForMax = (state.numLines(4, maximizingPlayer)*100);
+    var linesOfTwoForMax = (state.numLines(2, maximizingPlayer) * 10);
+    var linesOfThreeForMax = (state.numLines(3, maximizingPlayer) * 25);
+    var linesOfFourForMax = (state.numLines(4, maximizingPlayer) * 200);
 
     var maxValue = linesOfTwoForMax + linesOfThreeForMax + linesOfFourForMax;
 
 
-    var linesOfTwoForMin = (state.numLines(2, minimizingPlayer)*10)
-    var linesOfThreeForMin = (state.numLines(3, minimizingPlayer)*25);
-    var linesOfFourForMin = (state.numLines(4, minimizingPlayer)*100);
+    var linesOfTwoForMin = (state.numLines(2, minimizingPlayer) * 10)
+    var linesOfThreeForMin = (state.numLines(3, minimizingPlayer) * 25);
+    var linesOfFourForMin = (state.numLines(4, minimizingPlayer) * 200);
 
     var minValue = linesOfTwoForMin + linesOfThreeForMin + linesOfFourForMin;
 
@@ -156,30 +156,16 @@
 		var possibleStates = state.nextStates();
 		var currentPlayer = state.nextMovePlayer;
 		//Your code here.
-		let lowestVal = undefined;
 
-		//var testAllStates = function() {
-			for (var i = 0; i < possibleStates.length; i++) {
-				var val = heuristic(possibleStates[i], maximizingPlayer)
-				if(lowestVal === undefined) {
-					lowestVal = val;
-				} else{
-					lowestVal = Math.min(lowestVal, val)
-				}
-				//console.log(lowestVal)
-			}
-			//console.log('FIN')
-		//}
-
-
-
-		if(depth === 0 || possibleStates.length === 1 || possibleStates.length === 0) {
+		if (depth === 0 || possibleStates.length < 2) {
 			return heuristic(state, maximizingPlayer)
-		} else {
-			return lowestVal
 		}
 
+		let stateVals = possibleStates.map(nextState => {
+			return minimax(nextState, depth - 1, maximizingPlayer);
+		})
 
+		return (currentPlayer === maximizingPlayer) ? Math.max(...stateVals) : Math.min(...stateVals);
 
 	}
 
